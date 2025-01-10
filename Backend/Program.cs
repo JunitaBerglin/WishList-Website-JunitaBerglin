@@ -1,3 +1,6 @@
+using Backend.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +10,10 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+builder.Services.AddDbContext<WishListContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -15,6 +22,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection();
+
 
 var summaries = new[]
 {
