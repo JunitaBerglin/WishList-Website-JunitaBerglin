@@ -9,6 +9,12 @@ namespace Backend.Models
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<WishListItem>()
+                .HasKey(i => i.ItemId);
+        }
+
         public DbSet<User> Users { get; set; }
         public DbSet<WishList> WishLists { get; set; }
         public DbSet<WishListItem> WishListItems { get; set; }
