@@ -1,3 +1,4 @@
+using Backend.DTOs;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,11 +18,61 @@ namespace Backend.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<WishListItem>> AddItem(WishListItem item)
+        public async Task<ActionResult<WishListItemDTO>> AddItem([FromBody] WishListItemDTO itemDTO)
         {
-            _context.WishListItems.Add(item);
+            if (itemDTO == null)
+            {
+                return BadRequest("Item data is required.");
+            }
+
+            var wishList = await _context.WishLists.FindAsync(itemDTO.WishListId);
+            if (wishList == null)
+            {
+                return BadRequest("Invalid WishListId.");
+            }
+
+            User? user = null;
+            if (itemDTO.PurchasedByUserId.HasValue)
+            {
+                user = await _context.Users.FindAsync(itemDTO.PurchasedByUserId);
+                if (user == null)
+                {
+                    return BadRequest("Invalid PurchasedByUserId.");
+                }
+            }
+
+            var newItem = new WishListItem
+            {
+                Name = itemDTO.Name,
+                Description = itemDTO.Description,
+                Price = itemDTO.Price,
+                IsPurchased = itemDTO.IsPurchased,
+                Link = itemDTO.Link,
+                WishListId = itemDTO.WishListId,
+                WishList = wishList,
+                PurchasedByUserId = itemDTO.PurchasedByUserId,
+                PurchasedBy = user
+            };
+
+            _context.WishListItems.Add(newItem);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetItemsForWishList", "WishList", new { wishListId = item.WishListId }, item);
+
+            var createdItemDTO = new WishListItemDTO
+            {
+                Name = newItem.Name,
+                Description = newItem.Description,
+                Price = newItem.Price,
+                IsPurchased = newItem.IsPurchased,
+                Link = newItem.Link,
+                PurchasedByUserId = newItem.PurchasedByUserId,
+                WishListId = newItem.WishListId
+            };
+
+            return CreatedAtAction(
+                "GetItemsForWishList",
+                "WishList",
+                new { wishListId = newItem.WishListId },
+                createdItemDTO);
         }
     }
 }
