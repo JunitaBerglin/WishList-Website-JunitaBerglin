@@ -89,7 +89,10 @@ namespace Backend.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("PurchasedByUserId")
+                    b.Property<int>("PurchasedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.Property<int>("WishListId")
@@ -99,6 +102,8 @@ namespace Backend.Migrations
 
                     b.HasIndex("PurchasedByUserId");
 
+                    b.HasIndex("UserId");
+
                     b.HasIndex("WishListId");
 
                     b.ToTable("WishListItems");
@@ -107,7 +112,7 @@ namespace Backend.Migrations
             modelBuilder.Entity("Backend.Models.WishList", b =>
                 {
                     b.HasOne("Backend.Models.User", "User")
-                        .WithMany()
+                        .WithMany("WishLists")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -119,7 +124,13 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Backend.Models.User", "PurchasedBy")
                         .WithMany()
-                        .HasForeignKey("PurchasedByUserId");
+                        .HasForeignKey("PurchasedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Models.User", null)
+                        .WithMany("PurchasedItems")
+                        .HasForeignKey("UserId");
 
                     b.HasOne("Backend.Models.WishList", "WishList")
                         .WithMany("Items")
@@ -130,6 +141,13 @@ namespace Backend.Migrations
                     b.Navigation("PurchasedBy");
 
                     b.Navigation("WishList");
+                });
+
+            modelBuilder.Entity("Backend.Models.User", b =>
+                {
+                    b.Navigation("PurchasedItems");
+
+                    b.Navigation("WishLists");
                 });
 
             modelBuilder.Entity("Backend.Models.WishList", b =>
