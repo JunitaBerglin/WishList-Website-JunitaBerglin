@@ -1,4 +1,5 @@
 using Backend.Models;
+using Backend.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
@@ -13,26 +14,47 @@ namespace Backend.Controllers
         {
             _context = context;
         }
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<User>> CreateUser([FromBody] User user)
+        public async Task<ActionResult<User>> CreateUser([FromBody] UserDTO userDTO)
         {
-            if (user.WishLists != null)
+            if (userDTO == null)
             {
-                foreach (var wishList in user.WishLists)
-                {
-                    wishList.User = user;
+                return BadRequest("User data is required.");
+            }
 
-                    if (wishList.Items != null)
-                    {
-                        foreach (var item in wishList.Items)
-                        {
-                            item.WishList = wishList;
-                        }
-                    }
-                }
+            var user = new User
+            {
+                Username = userDTO.Username,
+                WishLists = new List<WishList>()
+            };
+
+            foreach (var wlDTO in userDTO.WishLists)
+            {
+                var wishList = new WishList
+                {
+                    Name = wlDTO.Name,
+                    IsPrivate = wlDTO.IsPrivate,
+                    UserId = 0,
+                    User = user,
+                    Items = new List<WishListItem>()
+                };
+
+                var items = wlDTO.Items.Select(i => new WishListItem
+                {
+                    Name = i.Name,
+                    Description = i.Description,
+                    Price = i.Price,
+                    IsPurchased = i.IsPurchased,
+                    Link = i.Link,
+                    PurchasedByUserId = i.PurchasedByUserId,
+                    PurchasedBy = null,
+                    WishList = wishList
+                }).ToList();
+
+                wishList.Items = items;
+                user.WishLists.Add(wishList);
             }
 
             _context.Users.Add(user);
