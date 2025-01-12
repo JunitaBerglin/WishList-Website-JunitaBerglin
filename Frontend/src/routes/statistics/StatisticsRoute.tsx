@@ -1,6 +1,6 @@
-import { statistics } from "../../components/pages/Statistics";
+import { createFileRoute } from '@tanstack/react-router'
+import { Statistics } from '../../components/pages/Statistics'
 
-export const WishListRoute = {
-  path: "/statistics",
-  component: statistics,
-};
+export const Route = createFileRoute('/statistics/StatisticsRoute')({
+  component: Statistics,
+})

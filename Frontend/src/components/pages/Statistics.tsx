@@ -1,8 +1,8 @@
-const statistics = () => {
+const Statistics = () => {
   return (
     <div>
       <h1>Statistics</h1>
     </div>
   );
 };
-export { statistics };
+export { Statistics };
