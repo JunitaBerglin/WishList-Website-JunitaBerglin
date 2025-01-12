@@ -74,5 +74,36 @@ namespace Backend.Controllers
                 new { wishListId = newItem.WishListId },
                 createdItemDTO);
         }
+
+        [HttpPost("purchase")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> MarkAsPurchased([FromBody] PurchaseRequestDTO purchaseRequest)
+        {
+            var item = await _context.WishListItems.FindAsync(purchaseRequest.WishListItemId);
+            if (item == null)
+            {
+                return BadRequest("Invalid WishListItemId.");
+            }
+
+            var user = await _context.Users.FindAsync(purchaseRequest.UserId);
+            if (user == null)
+            {
+                return BadRequest("Invalid UserId.");
+            }
+
+            if (item.IsPurchased)
+            {
+                return BadRequest("This item has already been purchased.");
+            }
+
+            item.IsPurchased = true;
+            item.PurchasedByUserId = user.UserId;
+            item.PurchasedBy = user;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Item marked as purchased.");
+        }
     }
 }
