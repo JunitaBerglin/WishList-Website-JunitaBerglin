@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddSwaggerExamplesFromAssemblyOf<WishListExample>();
 builder.Services.AddSwaggerExamplesFromAssemblyOf<UserExample>();
 builder.Services.AddSwaggerExamplesFromAssemblyOf<WishListItemExample>();
+builder.Services.AddSwaggerExamplesFromAssemblyOf<PurchaseExample>();
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
