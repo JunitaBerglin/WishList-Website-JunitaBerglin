@@ -1,9 +1,13 @@
-import { createRouter, createRouteTree } from "@tanstack/react-router";
-import { WishListRoute } from "./WishListRoute";
-import { StatisticsRoute } from "./StatisticsRoute";
+import { createFileRoute } from "@tanstack/react-router";
 
-const routeTree = createRouteTree([
-  RootRoute.addChildren([WishListRoute, StatisticsRoute]),
-]);
+export const Route = createFileRoute("/")({
+  component: Index,
+});
 
-export const router = createRouter({ routeTree });
+function Index() {
+  return (
+    <div className="p-2">
+      <h3>Welcome Home!</h3>
+    </div>
+  );
+}
