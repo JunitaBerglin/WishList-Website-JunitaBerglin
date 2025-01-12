@@ -1,4 +1,5 @@
 using Backend.DTOs;
+using Backend.SwaggerExamples;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -77,7 +78,8 @@ namespace Backend.Controllers
                     Price = i.Price,
                     IsPurchased = i.IsPurchased,
                     Link = i.Link,
-                    PurchasedByUserId = i.PurchasedByUserId
+                    PurchasedByUserId = i.PurchasedByUserId,
+                    WishListId = i.WishListId
                 }).ToList()
             };
 
@@ -99,7 +101,8 @@ namespace Backend.Controllers
                 Price = i.Price,
                 IsPurchased = i.IsPurchased,
                 Link = i.Link,
-                PurchasedByUserId = i.PurchasedByUserId
+                PurchasedByUserId = i.PurchasedByUserId,
+                WishListId = i.WishListId
             });
 
             return Ok(itemDTOs);
