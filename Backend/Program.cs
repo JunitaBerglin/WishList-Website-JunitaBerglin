@@ -1,4 +1,5 @@
 using Backend.Models;
+using Backend.SwaggerExamples;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text.Json.Serialization;

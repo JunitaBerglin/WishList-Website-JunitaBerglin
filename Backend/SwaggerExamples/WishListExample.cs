@@ -1,5 +1,6 @@
-using Swashbuckle.AspNetCore.Filters;
 using Backend.DTOs;
+namespace Backend.SwaggerExamples;
+using Swashbuckle.AspNetCore.Filters;
 
 public class WishListExample : IExamplesProvider<WishListDTO>
 {
@@ -20,6 +21,7 @@ public class WishListExample : IExamplesProvider<WishListDTO>
                     IsPurchased = false,
                     Link = "https://example.com/headphones",
                     PurchasedByUserId = 1,
+                    WishListId = 1
                 }
             }
         };

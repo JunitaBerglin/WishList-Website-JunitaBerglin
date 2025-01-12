@@ -1,4 +1,5 @@
 using Swashbuckle.AspNetCore.Filters;
+namespace Backend.SwaggerExamples;
 using Backend.DTOs;
 
 public class UserExample : IExamplesProvider<UserDTO>
@@ -19,6 +20,7 @@ public class UserExample : IExamplesProvider<UserDTO>
                         {
                             new WishListItemDTO
                             {
+                                WishListId = 1,
                                 Name = "Noise-cancelling headphones",
                                 Description = "High-quality over-ear headphones",
                                 Price = 250.00m,

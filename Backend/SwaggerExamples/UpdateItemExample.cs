@@ -1,4 +1,5 @@
 using Swashbuckle.AspNetCore.Filters;
+namespace Backend.SwaggerExamples;
 using Backend.DTOs;
 
 public class UpdateItemExample : IExamplesProvider<WishListItemDTO>
