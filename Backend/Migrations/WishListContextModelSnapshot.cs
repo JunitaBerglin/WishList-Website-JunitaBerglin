@@ -89,7 +89,7 @@ namespace Backend.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("PurchasedByUserId")
+                    b.Property<int?>("PurchasedByUserId")
                         .HasColumnType("int");
 
                     b.Property<int?>("UserId")
@@ -125,8 +125,7 @@ namespace Backend.Migrations
                     b.HasOne("Backend.Models.User", "PurchasedBy")
                         .WithMany()
                         .HasForeignKey("PurchasedByUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Backend.Models.User", null)
                         .WithMany("PurchasedItems")

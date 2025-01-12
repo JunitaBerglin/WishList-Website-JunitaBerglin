@@ -37,7 +37,8 @@ namespace Backend.Models
                 .HasOne(i => i.PurchasedBy)
                 .WithMany()
                 .HasForeignKey(i => i.PurchasedByUserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired(false);
 
             base.OnModelCreating(modelBuilder);
         }
