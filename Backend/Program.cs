@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddSwaggerExamplesFromAssemblyOf<WishListExample>();
+builder.Services.AddSwaggerExamplesFromAssemblyOf<UserExample>();
 builder.Services.AddSwaggerExamplesFromAssemblyOf<WishListItemExample>();
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
