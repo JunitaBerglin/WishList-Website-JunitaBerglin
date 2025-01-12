@@ -1,6 +1,7 @@
 using Backend.DTOs;
 using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -73,6 +74,41 @@ namespace Backend.Controllers
                 "WishList",
                 new { wishListId = newItem.WishListId },
                 createdItemDTO);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateItem(int id, WishListItemDTO updatedItemDTO)
+        {
+            if (id != updatedItemDTO.WishListId)
+            {
+                return BadRequest("Item ID does not match.");
+            }
+
+            var existingItem = await _context.WishListItems.FindAsync(id);
+            if (existingItem == null)
+            {
+                return NotFound("Item not found.");
+            }
+
+            existingItem.Name = updatedItemDTO.Name;
+            existingItem.Description = updatedItemDTO.Description;
+            existingItem.Price = updatedItemDTO.Price;
+            existingItem.IsPurchased = updatedItemDTO.IsPurchased;
+            existingItem.Link = updatedItemDTO.Link;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return StatusCode(500, "An error occurred while updating the item.");
+            }
+
+            return Ok("Item updated successfully.");
         }
 
         [HttpPost("purchase")]
