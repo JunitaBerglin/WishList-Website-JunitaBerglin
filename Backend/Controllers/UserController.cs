@@ -1,6 +1,7 @@
 using Backend.Models;
 using Backend.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -74,6 +75,31 @@ namespace Backend.Controllers
                 return NotFound();
             }
             return Ok(user);
+        }
+
+        [HttpGet("{id}/history")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<WishListItemDTO>>> GetPurchasedItems(int id)
+        {
+            var user = await _context.Users.Include(u => u.PurchasedItems).FirstOrDefaultAsync(u => u.UserId == id);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var purchasedItems = user.PurchasedItems.Select(item => new WishListItemDTO
+            {
+                Name = item.Name,
+                Description = item.Description,
+                Price = item.Price,
+                IsPurchased = item.IsPurchased,
+                Link = item.Link,
+                WishListId = item.WishListId,
+                PurchasedByUserId = item.PurchasedByUserId
+            });
+
+            return Ok(purchasedItems);
         }
     }
 }
